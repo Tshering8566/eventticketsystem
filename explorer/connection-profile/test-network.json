@@ -1,0 +1,52 @@
+{
+	"name": "test-network",
+	"version": "1.0.0",
+	"client": {
+		"tlsEnable": false,
+		"adminCredential": {
+			"id": "admin",
+			"password": "admin"
+		},
+		"enableAuthentication": false,
+		"organization": "EventOrgMSP",
+		"connection": {
+			"timeout": {
+				"peer": {
+					"endorser": "300"
+				},
+				"orderer": "300"
+			}
+		}
+	},
+	"channels": {
+		"eventticketingchannel": {
+			"peers": {
+				"eventmgr.eventtickets.com": {},
+				"ticketmgr.eventtickets.com": {}
+			}
+		}
+	},
+	"organizations": {
+		"EventOrg1MSP": {
+			"mspid": "EventOrg1MSP",
+			"adminPrivateKey": {
+				"path": "/tmp/crypto/peerOrganizations/eventtickets.com/users/Admin@eventtickets.com/msp/keystore/priv_sk"
+			},
+			"peers": [
+				"eventmgr.eventtickets.com",
+				"ticketmgr.eventtickets.com"
+			],
+			"signedCert": {
+				"path": "/tmp/crypto/peerOrganizations/eventtickets.com/users/Admin@eventtickets.com/msp/signcerts/Admin@eventtickets.com-cert.pem"
+			}
+		}
+	},
+	"peers": {
+		"eventmgr.eventtickets.com": {
+			"url": "grpc://eventmgr.eventtickets.com:7051"
+		},
+		"ticketmgr.eventtickets.com": {
+			"url": "grpc://ticketmgr.eventtickets.com:7051"
+		}
+	}
+}

@@ -1,0 +1,40 @@
+{
+    "name": "EventOrgConsortium",
+    "version": "1.0.0",
+    "channels": {
+        "eventorgchannel": {
+            "orderers": [
+                "orderer.eventtickets.com"
+            ],
+            "peers": {
+                "eventmgr.eventtickets.com": {},
+                "ticketmgr.eventtickets.com": {}
+            }
+        }
+    },
+    "organizations": {
+        "EventOrg": {
+            "mspid": "EventOrgMSP",
+            "peers": [
+                "eventmgr.eventtickets.com",
+                "ticketmgr.eventtickets.com"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer.eventtickets.com": {
+            "url": "grpc://orderer.eventtickets.com:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer.eventtickets.com"
+            }
+        }
+    },
+    "peers": {
+        "eventmgr.eventtickets.com": {
+            "url": "grpc://eventmgr.eventtickets.com:7051"
+        },
+        "ticketmgr.eventtickets.com": {
+            "url": "grpc://ticketmgr.eventtickets.com:7051"
+        }
+    }
+}

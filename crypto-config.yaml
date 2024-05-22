@@ -1,0 +1,27 @@
+# Defines four organizations
+# - Orderer organization
+# - Natuni
+# - Privateuni
+# - Interuni
+
+##### Orderer for Natuni
+OrdererOrgs:
+  - Name: Orderer
+    Domain: eventtickets.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer
+
+#### Peers for Natuni
+PeerOrgs:
+  # Peer configuration for Natuni
+  - Name: EventOrg
+    Domain: eventtickets.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: eventmgr.eventtickets.com
+        CommonName: eventmgr.eventtickets.com
+      - Hostname: ticketmgr.eventtickets.com
+        CommonName: ticketmgr.eventtickets.com
+    Users:
+      Count: 1

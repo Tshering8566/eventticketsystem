@@ -1,0 +1,11 @@
+{
+    "name": "eventticketconsortium",
+    "dockerComposeFile": [
+        "docker-compose-unicsrt.yml"
+    ],
+    "service": "development",
+    "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+    "features": {
+        "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    }
+}

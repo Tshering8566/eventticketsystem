@@ -1,0 +1,114 @@
+version: '3.8'
+networks:
+  event-ticketing-nets:
+    external: true
+
+# Storage outside the containers
+volumes:
+  data-orderer.eventtickets.com:
+  data-eventmgr.eventtickets.com:
+  data-ticketmgr.eventtickets.com:
+
+
+services:
+  development:
+    hostname: devweb
+    build:
+      context: .
+      dockerfile: Dockerfile.Dev
+    # environment:
+    command: |
+      sleep infinity
+    stop_grace_period: 5s
+    volumes:
+      - ../..:/workspaces:cached
+    # depends_on:
+    networks:
+      - event-ticketing-nets
+
+  # Orderer service
+  orderer.eventtickets.com:
+    container_name: orderer.eventtickets.com
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    command: orderer
+    # Override environment variables for orderer in this section
+    environment:
+      - FABRIC_CFG_PATH=/var/hyperledger/config
+      - FABRIC_LOGGING_SPEC=ERROR
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    # Host folder mappings
+    volumes:
+      # Folder with genesis block
+      - ${PWD}/config/orderer:/var/hyperledger/config
+      # Map the folder with MSP for orderer
+      - ${PWD}/config/crypto-config/ordererOrganizations/eventtickets.com/orderers/orderer.eventtickets.com/msp:/var/hyperledger/msp
+      # Added to support the TLS setup
+      - ${PWD}/config/crypto-config/ordererOrganizations/eventtickets.com/orderers/orderer.eventtickets.com/tls:/var/hyperledger/tls
+      - data-orderer.eventtickets.com:/var/ledger
+    ports:
+      - 7050:7050
+      - 8443:8443
+    networks:
+      - event-ticketing-nets
+
+  # eventmgr
+  eventmgr.eventtickets.com:
+    container_name: eventmgr.eventtickets.com
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    # Override variables in this section
+    environment:
+      - FABRIC_CFG_PATH=/var/hyperledger/config
+      - FABRIC_LOGGING_SPEC=WARNING
+      - CORE_PEER_LOCALMSPID=EventOrgMSP
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=event-ticketing-nets
+    # Start the peer node
+    command: peer node start
+    # Host folder mappings
+    volumes:
+      # Folder with channel create tx file
+      - ${PWD}/config/eventmgr:/var/hyperledger/config
+      # Map the folder with MSP for Peer
+      - ${PWD}/config/crypto-config/peerOrganizations/eventtickets.com/peers/eventmgr.eventtickets.com/msp:/var/hyperledger/msp
+      # Added to support the TLS setup
+      - ${PWD}/config/crypto-config/peerOrganizations/eventtickets.com/peers/eventmgr.eventtickets.com/tls:/var/hyperledger/tls
+      - /var/run/:/var/run/
+      - data-eventmgr.eventtickets.com:/var/hyperledger/production
+    depends_on:
+      - orderer.eventtickets.com
+    # Map the ports on Host VM to container ports
+    ports:
+      - 7051:7051
+      - 7052:7052
+    networks:
+      - event-ticketing-nets
+
+  #ticketmgr
+  ticketmgr.eventtickets.com:
+    container_name: ticketmgr.eventtickets.com
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    # Override variables in this section
+    environment:
+      - FABRIC_CFG_PATH=/var/hyperledger/config
+      - FABRIC_LOGGING_SPEC=WARNING
+      - CORE_PEER_LOCALMSPID=EventOrgMSP
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=event-ticketing-nets
+    # Start the peer node
+    command: peer node start
+    # Host folder mappings
+    volumes:
+      # Folder with channel create tx file
+      - ${PWD}/config/ticketmgr:/var/hyperledger/config
+      # Map the folder with MSP for Peer
+      - ${PWD}/config/crypto-config/peerOrganizations/eventtickets.com/peers/ticketmgr.eventtickets.com/msp:/var/hyperledger/msp
+      # Added to support the TLS setup
+      - ${PWD}/config/crypto-config/peerOrganizations/eventtickets.com/peers/ticketmgr.eventtickets.com/tls:/var/hyperledger/tls
+      - /var/run/:/var/run/
+      - data-ticketmgr.eventtickets.com:/var/hyperledger/production
+    depends_on:
+      - orderer.eventtickets.com
+    # Map the ports on Host VM to container ports
+    ports:
+      - 8051:7051
+      - 8052:7052
+    networks:
+      - event-ticketing-nets

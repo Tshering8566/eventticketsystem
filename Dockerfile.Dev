@@ -1,0 +1,20 @@
+#UsingdockerimagefrommicrosoftUbuntu:jammy
+FROM mcr.microsoft.com/devcontainers/base:jammy
+#UpdatetheOS
+RUN apt-get update
+#Installthepingcommand
+RUN apt-get -y install --no-install-recommends iputils-ping
+#Runtheupdateforapt
+RUN apt update
+#InstallGo
+RUN apt install -y golang-go
+#InstallJava
+RUN apt install -y default-jdk
+#InstallPython
+RUN apt install -y python3
+#InstallNode
+RUN apt install -y nodejs
+#Installnpm
+RUN apt install -y npm
+#DownloadthescriptforHLFandchangetoexecutable
+RUN curl -sSLO https://raw.githubusercontent.com/hyperledger/fabric/main/scripts/install-fabric.sh && chmod +x install-fabric.sh

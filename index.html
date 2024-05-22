@@ -1,0 +1,507 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>Event Ticketing System</title>
+</head>
+
+<body>
+    <div class="container">
+        <nav class="navbar bg-light">
+            <div class="container-fluid">
+                <span class="navbar-brand mb-0 h1">Event Ticketing System</span>
+            </div>
+        </nav>
+        <hr>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Create Event
+                    </div>
+                    <div class="card-body">
+                        <form id="createEventForm">
+                            <div class="mb-3">
+                                <label for="eventId" class="form-label">Event ID</label>
+                                <input type="text" class="form-control" id="eventId">
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventName" class="form-label">Event Name</label>
+                                <input type="text" class="form-control" id="eventName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventDate" class="form-label">Event Date</label>
+                                <input type="date" class="form-control" id="eventDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="eventLocation" class="form-label">Event Location</label>
+                                <input type="text" class="form-control" id="eventLocation">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Event</button>
+                        </form>
+                    </div>
+                    <div id="responseMessage"></div>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" id="eventCard">
+                    <div class="card-header">Event Information</div>
+                    <div class="card-body">
+                        <form id="getEventForm">
+                            <div class="mb-3">
+                                <label for="searchEventId" class="form-label">Event ID</label>
+                                <input type="text" class="form-control" id="searchEventId">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Get Event Details</button>
+                        </form>
+                        <form id="editEventForm" class="d-none">
+                            <label id="editEventId" class="form-label">ID: </label>
+                            <div class="mb-3">
+                                <label for="editEventName" class="form-label">Event Name</label>
+                                <input type="text" class="form-control" id="editEventName">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEventDate" class="form-label">Event Date</label>
+                                <input type="date" class="form-control" id="editEventDate">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editEventLocation" class="form-label">Event Location</label>
+                                <input type="text" class="form-control" id="editEventLocation">
+                            </div>
+                            <button type="button" id="updateEventButton" class="btn btn-primary">Update Event</button>
+                            <button type="button" id="deleteEventButton" class="btn btn-danger">Delete Event</button>
+                        </form>
+                    </div>
+                    <div id="responseMessage"></div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-header">
+                        Create Ticket
+                    </div>
+                    <div class="card-body">
+                        <form id="createTicketForm">
+                            <div class="mb-3">
+                                <label for="ticketEventId" class="form-label">Event ID</label>
+                                <select class="form-control" id="ticketEventId">
+                                    <option value="">Select...</option>
+                                    <!-- Populate options dynamically with available event IDs -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketEventName" class="form-label">Event Name</label>
+                                <select class="form-control" id="ticketEventName">
+                                    <option value="">Select...</option>
+                                    <!-- Populate options dynamically with available event names -->
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketCount" class="form-label">Count</label>
+                                <input type="number" class="form-control" id="ticketCount">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketHolder" class="form-label">Holder</label>
+                                <input type="text" class="form-control" id="ticketHolder">
+                            </div>
+                            <div class="mb-3">
+                                <label for="ticketStatus" class="form-label">Status</label>
+                                <select class="form-control" id="ticketStatus">
+                                    <option value="">Select...</option>
+                                    <option value="available">Available</option>
+                                    <option value="sold">Sold</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Ticket</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="card" id="ticketCard">
+                    <div class="card-header">Ticket Information</div>
+                    <div class="card-body">
+                        <form id="getTicketForm">
+                            <div class="mb-3">
+                                <label for="searchTicketId" class="form-label">Ticket ID</label>
+                                <input type="text" class="form-control" id="searchTicketId">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Get Ticket Details</button>
+                        </form>
+                        <form id="editTicketForm" class="d-none">
+                            <label id="editTicketId" class="form-label">ID: </label>
+                            <div class="mb-3">
+                                <label for="editTicketEventId" class="form-label">Event ID</label>
+                                <input type="text" class="form-control" id="editTicketEventId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTicketHolder" class="form-label">Holder</label>
+                                <input type="text" class="form-control" id="editTicketHolder">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editTicketStatus" class="form-label">Status</label>
+                                <select class="form-control" id="editTicketStatus">
+                                    <option value="">Select...</option>
+                                    <option value="available">Available</option>
+                                    <option value="sold">Sold</option>
+                                </select>
+                            </div>
+                            <button type="button" id="updateTicketButton" class="btn btn-primary">Update Ticket</button>
+                            <button type="button" id="deleteTicketButton" class="btn btn-danger">Delete Ticket</button>
+                        </form>
+                    </div>
+                    <div class="card-footer"><label class="text-danger" id="ticketMessage"></label></div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="modal" tabindex="-1" role="dialog" id="successModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Success</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>The transaction is successful.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            id="noButton">No</button>
+                        <button type="button" class="btn btn-primary" id="yesButton">Yes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <!-- <script src="index_html.js"></script> -->
+</body>
+<script>
+    // Create Event
+    document.getElementById('createEventForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const eventId = document.getElementById('eventId').value;
+        const eventName = document.getElementById('eventName').value;
+        const eventDate = document.getElementById('eventDate').value;
+        const eventLocation = document.getElementById('eventLocation').value;
+
+        // Convert date to RFC3339 format
+        const formattedDate = new Date(eventDate).toISOString();
+
+        const eventDetails = {
+            id: eventId,
+            name: eventName,
+            date: formattedDate,
+            location: eventLocation
+        };
+
+        try {
+            const response = await fetch('/events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventDetails)
+            });
+
+            const messageDiv = document.getElementById('responseMessage');
+
+            if (response.status === 204) {
+                messageDiv.textContent = 'Event created successfully!';
+                messageDiv.style.color = 'green';
+            } else {
+                const errorText = await response.text();
+                messageDiv.textContent = `Failed to create event: ${errorText}`;
+                messageDiv.style.color = 'red';
+            }
+        } catch (error) {
+            const messageDiv = document.getElementById('responseMessage');
+            messageDiv.textContent = `Error: ${error}`;
+            messageDiv.style.color = 'red';
+        }
+    });
+
+    // Get event by id
+    document.getElementById('getEventForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const eventId = document.getElementById('searchEventId').value;
+        const messageDiv = document.getElementById('responseMessage');
+
+        try {
+            const response = await fetch(`/events/${eventId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Failed to fetch event details: ${await response.text()}`);
+            }
+
+            const eventData = await response.json();
+
+            // Populate the edit form with the event details
+            document.getElementById('editEventId').textContent = `ID: ${eventData.id}`;
+            document.getElementById('editEventName').value = eventData.name;
+            document.getElementById('editEventDate').value = eventData.date.split('T')[0]; // Format date to YYYY-MM-DD
+            document.getElementById('editEventLocation').value = eventData.location;
+
+            // Show the edit form
+            document.getElementById('editEventForm').classList.remove('d-none');
+            messageDiv.textContent = '';
+        } catch (error) {
+            messageDiv.textContent = `Error: ${error.message}`;
+            messageDiv.style.color = 'red';
+        }
+    });
+
+    document.getElementById('updateEventButton').addEventListener('click', async function () {
+        const eventId = document.getElementById('searchEventId').value;
+        const eventName = document.getElementById('editEventName').value;
+        const eventDate = document.getElementById('editEventDate').value;
+        const eventLocation = document.getElementById('editEventLocation').value;
+
+        const formattedDate = new Date(eventDate).toISOString();
+
+        const eventDetails = {
+            id: eventId,
+            name: eventName,
+            date: formattedDate,
+            location: eventLocation
+        };
+
+        try {
+            const response = await fetch(`/events/${eventId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventDetails)
+            });
+
+            const messageDiv = document.getElementById('responseMessage');
+
+            if (!response.ok) {
+                throw new Error(`Failed to update event: ${await response.text()}`);
+            }
+
+            messageDiv.textContent = 'Event updated successfully!';
+            messageDiv.style.color = 'green';
+        } catch (error) {
+            const messageDiv = document.getElementById('responseMessage');
+            messageDiv.textContent = `Error: ${error.message}`;
+            messageDiv.style.color = 'red';
+        }
+    });
+
+    document.getElementById('deleteEventButton').addEventListener('click', async function () {
+        const eventId = document.getElementById('searchEventId').value;
+
+        try {
+            const response = await fetch(`/events/${eventId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const messageDiv = document.getElementById('responseMessage');
+
+            if (!response.ok) {
+                throw new Error(`Failed to delete event: ${await response.text()}`);
+            }
+
+            messageDiv.textContent = 'Event deleted successfully!';
+            messageDiv.style.color = 'green';
+
+            // Clear and hide the edit form
+            document.getElementById('editEventForm').reset();
+            document.getElementById('editEventForm').classList.add('d-none');
+            document.getElementById('editEventId').textContent = '';
+        } catch (error) {
+            const messageDiv = document.getElementById('responseMessage');
+            messageDiv.textContent = `Error: ${error.message}`;
+            messageDiv.style.color = 'red';
+        }
+    });
+
+    // Function to fetch available events from the backend API
+    const getAvailableEvents = async () => {
+        try {
+            const response = await fetch('/allevents');
+            if (response.ok) {
+                const events = await response.json();
+                return events;
+                console.log(events);
+            } else {
+                console.error('Failed to fetch available events');
+                return [];
+            }
+        } catch (error) {
+            console.error('Error fetching available events:', error);
+            return [];
+        }
+    };
+
+    // Update the create ticket form with dynamically fetched event options
+    const updateCreateTicketForm = async () => {
+        try {
+            const events = await getAvailableEvents();
+            const eventIdDropdown = document.getElementById('ticketEventId');
+            const eventNameDropdown = document.getElementById('ticketEventName');
+
+            // Clear existing options
+            eventIdDropdown.innerHTML = '<option value="">Select...</option>';
+            eventNameDropdown.innerHTML = '<option value="">Select...</option>';
+
+            // Populate dropdown options with fetched events
+            events.forEach(event => {
+                const optionId = document.createElement('option');
+                optionId.value = event.ID;
+                optionId.textContent = event.ID;
+                eventIdDropdown.appendChild(optionId);
+
+                const optionName = document.createElement('option');
+                optionName.value = event.Name;
+                optionName.textContent = event.Name;
+                eventNameDropdown.appendChild(optionName);
+            });
+        } catch (error) {
+            console.error('Error updating create ticket form:', error);
+        }
+    };
+
+    // Call the function to update the create ticket form when the page loads
+    updateCreateTicketForm();
+
+    // Event listeners for create ticket form submission
+    document.getElementById('createTicketForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const { eventId, eventName, count, holder, status } = {
+            eventId: document.getElementById('ticketEventId').value,
+            eventName: document.getElementById('ticketEventName').value,
+            count: parseInt(document.getElementById('ticketCount').value),
+            holder: document.getElementById('ticketHolder').value,
+            status: document.getElementById('ticketStatus').value,
+        };
+
+        // Validate request parameters
+        if (!eventId || !eventName || !holder || !status || typeof count !== 'number') {
+            console.error('Invalid request parameters', { eventId, eventName, count, holder, status });
+            return res.status(400).send('Invalid request parameters');
+        }
+
+        // Call the CreateTicket API endpoint
+        const result = await fetch('/tickets', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ eventId, eventName, count, holder, status }),
+        });
+
+        // Handle the response from the backend API
+        if (response.ok) {
+            const { result, events } = await response.json();
+            res.status(200).send({ result, events });
+        } else {
+            console.error('Failed to create ticket:', response.status, response.statusText);
+            res.status(500).send({ error: response.statusText });
+        }
+    });
+
+    // Event listeners for get ticket details form submission
+    document.getElementById('getTicketForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const { id } = document.getElementById('searchTicketId').value;
+
+        // Call the ReadTicket API endpoint
+        const result = await fetch(`/tickets/${id}`);
+
+        // Handle the response from the backend API
+        if (response.ok) {
+            const ticket = await response.json();
+            res.status(200).send(ticket);
+        } else {
+            console.error('Failed to read ticket:', response.status, response.statusText);
+            res.status(404).send(`Failed to read ticket: ${id}`);
+        }
+    });
+
+    // Event listeners for update ticket form submission
+    document.getElementById('editTicketForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const { id } = document.getElementById('editTicketId').textContent;
+        const { status } = document.getElementById('editTicketStatus').value;
+
+        // Call the UpdateTicketStatus API endpoint
+        const result = await fetch(`/tickets/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ status }),
+        });
+
+        // Handle the response from the backend API
+        if (response.ok) {
+            res.status(204).send(result);
+        } else {
+            console.error('Failed to update ticket:', response.status, response.statusText);
+            res.status(500).send({ error: response.statusText });
+        }
+    });
+
+    // Event listeners for delete ticket button click
+    document.getElementById('deleteTicketButton').addEventListener('click', async () => {
+        const { id } = document.getElementById('editTicketId').textContent;
+
+        // Call the DeleteTicket API endpoint
+        const result = await fetch(`/tickets/${id}`, {
+            method: 'DELETE',
+        });
+
+        // Handle the response from the backend API
+        if (response.ok) {
+            res.send(result);
+        } else {
+            console.error('Failed to delete ticket:', response.status, response.statusText);
+            res.status(500).send({ error: response.statusText });
+        }
+    });
+
+</script>
+
+
+</html>
