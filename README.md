@@ -14,8 +14,7 @@ Event Ticketing Solutions aims to revolutionize the event management industry by
   - Orderer Organization (OrdererOrg)
 
 - **Peer Nodes:**
-  - Event Ticketing Solutions (EventOrg1): 1 peer node
-  - Ticketing Platform Providers (TicketProviderOrg): 1 peer node
+  - Event Ticketing Solutions (EventOrg): 1 peer node
 
 - **Orderer Nodes:**
   - OrdererOrg: 1 orderer node (orderer.eventtickets.com)
